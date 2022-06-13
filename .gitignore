@@ -1,1 +1,17 @@
+# Virtal Enviroments
+/importing
+
+# Libraries
+/src/gsconfig-py3
+
+# Data
+/data/layers/*
 /data/layers/*.*
+/notes.txt
+
+# Python compiles
+*/__pycache__
+/src/import_geoserver/__pycache__
+
+# Tmp files
+/src/import_geoserver/*.zip

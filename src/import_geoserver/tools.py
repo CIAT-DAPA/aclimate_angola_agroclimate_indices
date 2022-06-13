@@ -67,46 +67,49 @@ class GeoserverClient(object):
             print("Workspace not found:", store_name)
             return None
 
-    def zip_files(self, file, folder_properties, folder_tmp):
-        if os.path.exists(file) and os.path.exists(folder_properties):
+    def zip_files(self, folder, folder_properties, folder_tmp):
+        if os.path.exists(folder) and os.path.exists(folder_properties):
 
             if os.path.exists(folder_tmp):
                 shutil. rmtree(folder_tmp)
             os.mkdir(folder_tmp)
 
+            # Copying files
             props = glob.glob(os.path.join(folder_properties, '*.properties'))
             if len(props) != 2:
                 print("check the properties file")
                 sys.exit()
             for p in props:
                 f = p.rsplit(os.path.sep, 1)[-1]
-                print("Copying properties:", file)
+                print("Copying properties")
                 shutil.copyfile(p, os.path.join(folder_tmp, f))
 
-            f = file.rsplit(os.path.sep, 1)[-1]
-            shutil.copyfile(file, os.path.join(folder_tmp, f))
+            # Copying rasters
+            files = glob.glob(os.path.join(folder, "*.*"))
+            for file in files:
+                f = file.rsplit(os.path.sep, 1)[-1]
+                shutil.copyfile(file, os.path.join(folder_tmp, f))
 
             zip_name = "mosaic.zip"  # zip file name
             list_files = glob.glob(os.path.join(folder_tmp, "*.*"))
             zip = ZipFile(zip_name, mode="w")
             print("Zipping")
             for f in list_files:
-                print(f)
                 zip.write(f, f.rsplit(os.path.sep, 1)[-1])
             zip.close()
             zip_path = os.path.join(os.getcwd(), zip_name)
+            print("zip:",zip_path)
             return zip_path
         else:
             print("Not zipped")
-            print(file, os.path.exists(file))
+            print(folder, os.path.exists(folder))
             print(folder_properties, os.path.exists(folder_properties))
             return None
 
     def create_mosaic(self, store_name, file, folder_properties, folder_tmp):
         output = self.zip_files(file, folder_properties, folder_tmp)
-        print(output)
-        self.catalog.create_imagemosaic(
-            store_name, output, workspace=self.workspace)
+        #print(output)
+        self.catalog.create_imagemosaic(store_name, output, workspace=self.workspace)
         print(f"Mosaic store : {store_name} is created!")
         store = self.catalog.get_store(store_name, workspace=self.workspace)
         url = self.url + "workspaces/" + self.workspace_name + \
