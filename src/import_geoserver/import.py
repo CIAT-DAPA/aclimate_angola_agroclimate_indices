@@ -1,9 +1,10 @@
 import os
 import sys
+from glob import glob
 from tools import GeoserverClient
 
 
-folder_root = "D:\\CIAT\\Code\\USAID\\aclimate_angola_agroclimate_indices\\"
+folder_root = "/cluster01/workspace/ANGOLARISKFINANCING/Data/Online_Platform/"
 folder_data = os.path.join(folder_root, "data")
 folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_data, "properties")
@@ -15,8 +16,9 @@ workspace_name = os.environ['GEO_WORKSPACE']
 #country_iso = workspace_name.split("_")[1]
 
 
+stores_aclimate = [x.split(os.sep)[-1] for x in glob(os.path.join(folder_layers,"*"), recursive = True)]
 #stores_aclimate = ["maize_dry_spells_duration","maize_number_dry_days","maize_number_dry_spells"]
-stores_aclimate = ["maize_dry_spells_duration"]
+#stores_aclimate = ["maize_dry_spells_duration"]
 
 
 # Connecting

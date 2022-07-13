@@ -5,7 +5,6 @@ import glob
 import shutil
 from geoserver.catalog import Catalog
 from geoserver.resource import Coverage
-#import geoserver.util
 from geoserver.support import DimensionInfo
 
 # https://github.com/dimitri-justeau/gsconfig-py3
